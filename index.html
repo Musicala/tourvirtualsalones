@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#f6f8ff" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <title>Tour Musicala</title>
+  <meta name="description" content="Recorrido virtual por los espacios de Musicala." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Tour Musicala" />
+  <meta property="og:description" content="Recorrido virtual por los espacios de Musicala." />
+  <meta property="og:type" content="website" />
+  <!-- <meta property="og:image" content="./assets/cover.jpg" /> -->
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <style>
+    /* Extra visual “safe” (no rompe tu CSS). Si ya existe, lo ignoras. */
+    :root{
+      --bg: #f6f8ff;
+      --ink: #0f172a;
+      --muted: rgba(15,23,42,.66);
+      --stroke: rgba(12,65,196,.14);
+      --stroke2: rgba(104,13,191,.12);
+      --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.92);
+      --shadow: 0 22px 60px rgba(15,23,42,.12);
+      --shadow2: 0 14px 38px rgba(15,23,42,.10);
+      --radius: 22px;
+    }
+
+    body{
+      background:
+        radial-gradient(1200px 600px at 15% 0%, rgba(12,65,196,.10), transparent 55%),
+        radial-gradient(900px 520px at 85% 10%, rgba(104,13,191,.10), transparent 55%),
+        radial-gradient(650px 420px at 50% 90%, rgba(206,0,113,.06), transparent 55%),
+        var(--bg);
+    }
+
+    .sr-only{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+
+    .skip{
+      position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
+    .skip:focus{
+      left:16px; top:16px; width:auto; height:auto; padding:10px 12px;
+      background:#fff; border:1px solid var(--stroke); border-radius:12px;
+      box-shadow: var(--shadow2); z-index:999;
+    }
+
+    /* Video frame upgrade */
+    .player__frame{
+      border-radius: 18px;
+      overflow:hidden;
+      background:#000;
+      box-shadow: var(--shadow2);
+      border:1px solid rgba(255,255,255,.55);
+    }
+    .player__frame video{
+      display:block;
+      width:100%;
+      aspect-ratio:16/9;
+      border:0;
+      background:#000;
+    }
+
+    /* Make hero feel premium even if CSS is modest */
+    .hero__card{
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.55));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius);
+      backdrop-filter: blur(10px);
+    }
+    .section__head .p--muted{ color: var(--muted); }
+
+    .iconbtn{
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.8);
+      border-radius: 14px;
+      box-shadow: 0 10px 22px rgba(15,23,42,.08);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .iconbtn:hover{ transform: translateY(-1px); box-shadow: 0 14px 28px rgba(15,23,42,.10); }
+    .iconbtn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
+
+    /* Cards feel more “selectable” */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.66));
+      border:1px solid var(--stroke);
+      border-radius: 18px;
+      box-shadow: 0 14px 34px rgba(15,23,42,.08);
+      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+      cursor:pointer;
+    }
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 44px rgba(15,23,42,.10);
+      border-color: rgba(12,65,196,.20);
+    }
+    .card.is-active{
+      border-color: rgba(12,65,196,.28);
+      box-shadow: 0 22px 54px rgba(12,65,196,.12);
+    }
+    .card__desc{ color: var(--muted); }
+
+    /* Dots */
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      border:1px solid var(--stroke2);
+      background: rgba(255,255,255,.8);
+      box-shadow: 0 10px 18px rgba(15,23,42,.06);
+    }
+    .dot.is-on{
+      transform: scale(1.1);
+      border-color: rgba(12,65,196,.35);
+      box-shadow: 0 12px 22px rgba(12,65,196,.12);
+    }
+
+    /* Modal polish */
+    .modal__panel{
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.65);
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.78));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .modal__frame video{
+      width:100%;
+      aspect-ratio:16/9;
+      display:block;
+      border-radius: 16px;
+      background:#000;
+      box-shadow: 0 18px 40px rgba(15,23,42,.12);
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+
+  <header class="top" role="banner">
+    <div class="top__inner">
+      <div class="brand" aria-label="Musicala">
+        <img
+          class="brand__logo"
+          src="./logo.png"
+          alt="Musicala"
+          width="44"
+          height="44"
+          loading="eager"
+          decoding="async"
+          onerror="this.style.display='none'"
+        />
+        <div class="brand__text">
+          <div class="brand__kicker">Recorrido virtual</div>
+          <h1 class="brand__title">Tour Musicala</h1>
+        </div>
+      </div>
+
+      <div class="top__cta">
+        <button class="btn btn--soft" id="btnStart" type="button">Iniciar</button>
+        <!-- Opcional: CTA real -->
+        <!-- <a class="btn" href="https://wa.me/57XXXXXXXXXX?text=Hola%20Musicala%2C%20quiero%20agendar%20una%20visita" target="_blank" rel="noopener">Agendar visita</a> -->
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap" role="main">
+
+    <!-- HERO: todo gira alrededor del video -->
+    <section class="hero" aria-label="Recorrido principal">
+      <div class="hero__card">
+
+        <div class="hero__left">
+          <h2 class="h2">Recorrido por nuestros espacios</h2>
+          <p class="p">
+            Elijan un espacio y miren el video aquí mismo.
+            Si están en celular, también pueden deslizar para cambiar.
+          </p>
+
+          <div class="hero__meta" aria-label="Estado del recorrido">
+            <div class="pill" id="pillNow" aria-live="polite">•</div>
+            <div class="dots" id="dots" aria-label="Progreso del tour"></div>
+          </div>
+
+          <div class="hero__nav" aria-label="Controles de navegación">
+            <button class="btn btn--soft" id="btnPrev" type="button" aria-label="Anterior">Anterior</button>
+            <button class="btn" id="btnNext" type="button" aria-label="Siguiente">Siguiente</button>
+          </div>
+
+          <!-- Microcopy corto, cliente-friendly -->
+          <div class="sr-only" aria-live="polite" id="ariaStatus"></div>
+        </div>
+
+        <div class="hero__right">
+          <div class="player" aria-label="Reproductor">
+            <div class="player__frame">
+              <video
+                id="vidMain"
+                controls
+                playsinline
+                preload="metadata"
+                aria-label="Video del tour"
+              >
+                Tu navegador no soporta video HTML5.
+              </video>
+            </div>
+
+            <div class="player__bar">
+              <div class="player__title" id="videoTitle">—</div>
+              <div class="player__actions">
+                <button class="iconbtn" id="btnCinema" type="button" aria-label="Ver en grande" title="Ver en grande">⛶</button>
+
+                <!-- Enlace listo para compartir/abrir (sin “cosas técnicas”) -->
+                <a
+                  class="iconbtn"
+                  id="btnOpenFile"
+                  href="#"
+                  aria-label="Abrir video en una pestaña"
+                  title="Abrir video"
+                >▶</a>
+
+                <button class="iconbtn" id="btnShare" type="button" aria-label="Copiar enlace del video" title="Copiar enlace">⎘</button>
+              </div>
+            </div>
+
+            <p class="player__desc" id="videoDesc">—</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ESPACIOS -->
+    <section class="section" aria-label="Explorar por espacios">
+      <div class="section__head">
+        <h3 class="h3">Explorar por espacios</h3>
+        <p class="p p--muted">Toca una tarjeta para cambiar de video.</p>
+      </div>
+
+      <div class="grid" id="cards" aria-label="Tarjetas de espacios"></div>
+    </section>
+
+    <footer class="footer" role="contentinfo">
+      <div class="footer__inner">
+        <div>
+          <div class="footer__title">Musicala</div>
+          <div class="footer__text">Escuela de artes · Música · Danza · Artes visuales · Teatro</div>
+        </div>
+        <div class="footer__right">
+          <a class="link" href="#" id="linkTop">Volver arriba ↑</a>
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Cinema modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal__backdrop" data-close="1"></div>
+
+    <div class="modal__panel" role="dialog" aria-modal="true" aria-label="Modo cine">
+      <div class="modal__top">
+        <div class="modal__title" id="modalTitle">—</div>
+        <button class="iconbtn" id="btnClose" type="button" aria-label="Cerrar" title="Cerrar">✕</button>
+      </div>
+
+      <div class="modal__frame">
+        <video
+          id="vidBig"
+          controls
+          playsinline
+          preload="metadata"
+          aria-label="Video del tour en grande"
+        >
+          Tu navegador no soporta video HTML5.
+        </video>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    // ✅ Ajusta aquí: ruta de archivos + textos cortos, ya “para clientes”
+    // Estructura: ./videos/<archivo>
+    const SPOTS = [
+      { key: "general", icon: "🏫", title: "Visita general", desc: "Recorrido rápido por la sede", file: "./videos/general.mp4" },
+      { key: "stim",    icon: "🌈", title: "Estimulación artística", desc: "Espacios pensados para peques", file: "./videos/estimulacion.mp4" },
+      { key: "artes",   icon: "🎨", title: "Artes plásticas", desc: "Materiales, técnica y creación", file: "./videos/artesplasticas.mp4" },
+      { key: "danza",   icon: "💃", title: "Salones de danza", desc: "Espacios amplios y cómodos", file: "./videos/danzas.mp4" },
+      { key: "musica",  icon: "🎶", title: "Salones de música", desc: "Instrumentos, sonido y clases", file: "./videos/musica.mp4" },
+    ];
+
+    const $ = (s) => document.querySelector(s);
+    const LS_KEY = "tour_musicala_idx";
+
+    const vidMain    = $("#vidMain");
+    const vidBig     = $("#vidBig");
+    const videoTitle = $("#videoTitle");
+    const videoDesc  = $("#videoDesc");
+    const pillNow    = $("#pillNow");
+    const dots       = $("#dots");
+    const cards      = $("#cards");
+
+    const btnPrev    = $("#btnPrev");
+    const btnNext    = $("#btnNext");
+    const btnCinema  = $("#btnCinema");
+    const btnClose   = $("#btnClose");
+    const btnStart   = $("#btnStart");
+    const btnShare   = $("#btnShare");
+    const btnOpen    = $("#btnOpenFile");
+    const modal      = $("#modal");
+    const modalTitle = $("#modalTitle");
+    const linkTop    = $("#linkTop");
+    const ariaStatus = $("#ariaStatus");
+
+    let idx = 0;
+    try {
+      const saved = Number(localStorage.getItem(LS_KEY));
+      if (Number.isFinite(saved) && saved >= 0 && saved < SPOTS.length) idx = saved;
+    } catch {}
+
+    function clampIndex(i){
+      const n = SPOTS.length;
+      return (i + n) % n;
+    }
+
+    function renderDots(){
+      if (!dots) return;
+      dots.innerHTML = "";
+      SPOTS.forEach((s, i) => {
+        const b = document.createElement("button");
+        b.className = "dot" + (i === idx ? " is-on" : "");
+        b.type = "button";
+        b.setAttribute("aria-label", `Ir a ${s.title} (${i + 1} de ${SPOTS.length})`);
+        b.addEventListener("click", () => go(i));
+        dots.appendChild(b);
+      });
+    }
+
+    function renderCards(){
+      if (!cards) return;
+      cards.innerHTML = "";
+      SPOTS.forEach((s, i) => {
+        const c = document.createElement("div");
+        c.className = "card" + (i === idx ? " is-active" : "");
+        c.tabIndex = 0;
+        c.role = "button";
+        c.setAttribute("aria-label", `Abrir ${s.title}`);
+        c.innerHTML = `
+          <div class="card__icon">${s.icon}</div>
+          <div class="card__meta">
+            <p class="card__title">${s.title}</p>
+            <p class="card__desc">${s.desc}</p>
+          </div>
+        `;
+        c.addEventListener("click", () => go(i));
+        c.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(i); }
+        });
+        cards.appendChild(c);
+      });
+    }
+
+    function setMainVideo(src){
+      if (!vidMain) return;
+      vidMain.pause();
+      vidMain.removeAttribute("src");
+      vidMain.load();
+      vidMain.src = src;
+      vidMain.load();
+    }
+
+    function updateUI(){
+      const s = SPOTS[idx];
+
+      setMainVideo(s.file);
+
+      if (videoTitle) videoTitle.textContent = s.title;
+      if (videoDesc)  videoDesc.textContent  = s.desc;
+      if (pillNow)    pillNow.textContent    = `${s.icon} ${s.title} · ${idx + 1}/${SPOTS.length}`;
+      if (ariaStatus) ariaStatus.textContent = `Mostrando: ${s.title}`;
+
+      if (btnOpen){
+        btnOpen.href = s.file;
+        btnOpen.target = "_blank";
+        btnOpen.rel = "noopener";
+      }
+
+      renderDots();
+      renderCards();
+
+      try { localStorage.setItem(LS_KEY, String(idx)); } catch {}
+    }
+
+    function go(nextIdx){
+      idx = clampIndex(nextIdx);
+      closeModal(true);
+      updateUI();
+      if (navigator.vibrate) { try { navigator.vibrate(10); } catch {} }
+    }
+    function next(){ go(idx + 1); }
+    function prev(){ go(idx - 1); }
+
+    let lastFocusedEl = null;
+
+    function openModal(){
+      const s = SPOTS[idx];
+      if (!modal) return;
+
+      lastFocusedEl = document.activeElement;
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      if (modalTitle) modalTitle.textContent = s.title;
+
+      if (vidBig){
+        vidBig.pause();
+        vidBig.removeAttribute("src");
+        vidBig.load();
+        vidBig.src = s.file;
+        vidBig.load();
+        vidBig.play().catch(() => {});
+      }
+
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+
+      btnClose?.focus?.();
+    }
+
+    function closeModal(force=false){
+      if (!modal) return;
+      if (!modal.classList.contains("is-open") && !force) return;
+
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+
+      if (vidBig){
+        vidBig.pause();
+        vidBig.removeAttribute("src");
+        vidBig.load();
+      }
+
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+
+      try { lastFocusedEl?.focus?.(); } catch {}
+      lastFocusedEl = null;
+    }
+
+    // EVENTS
+    btnNext?.addEventListener("click", next);
+    btnPrev?.addEventListener("click", prev);
+
+    btnStart?.addEventListener("click", () => {
+      document.querySelector(".hero")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => btnNext?.focus?.(), 350);
+    });
+
+    btnCinema?.addEventListener("click", openModal);
+    btnClose?.addEventListener("click", () => closeModal());
+
+    modal?.addEventListener("click", (e) => {
+      const t = e.target;
+      if (t && t.dataset && t.dataset.close) closeModal();
+    });
+
+    // Copiar enlace del video (para compartir rápido)
+    btnShare?.addEventListener("click", async () => {
+      const s = SPOTS[idx];
+      const url = new URL(s.file, location.href).href;
+      try {
+        await navigator.clipboard.writeText(url);
+        toast("Enlace copiado ✅");
+      } catch {
+        toast("No se pudo copiar 😅");
+      }
+    });
+
+    linkTop?.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    });
+
+    // Swipe (mobile)
+    (function enableSwipe(){
+      const area = document.querySelector(".hero__card");
+      if (!area) return;
+
+      let x0 = null, y0 = null;
+
+      area.addEventListener("touchstart", (e) => {
+        const t = e.touches?.[0];
+        if (!t) return;
+        x0 = t.clientX;
+        y0 = t.clientY;
+      }, { passive:true });
+
+      area.addEventListener("touchend", (e) => {
+        if (x0 == null || y0 == null) return;
+        const t = e.changedTouches?.[0];
+        if (!t) return;
+
+        const dx = t.clientX - x0;
+        const dy = t.clientY - y0;
+
+        if (Math.abs(dy) > Math.abs(dx)) { x0 = y0 = null; return; }
+        if (dx > 45) prev();
+        else if (dx < -45) next();
+
+        x0 = y0 = null;
+      }, { passive:true });
+    })();
+
+    // Toast mini
+    let toastTimer = null;
+    function toast(msg){
+      let el = document.getElementById("toast");
+      if(!el){
+        el = document.createElement("div");
+        el.id = "toast";
+        el.style.position = "fixed";
+        el.style.left = "50%";
+        el.style.bottom = "84px";
+        el.style.transform = "translateX(-50%)";
+        el.style.padding = "10px 12px";
+        el.style.borderRadius = "14px";
+        el.style.background = "rgba(255,255,255,.92)";
+        el.style.border = "1px solid rgba(12,65,196,.18)";
+        el.style.boxShadow = "0 18px 38px rgba(15,23,42,.12)";
+        el.style.fontWeight = "750";
+        el.style.zIndex = "60";
+        el.style.opacity = "0";
+        el.style.transition = "opacity .15s ease";
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+      requestAnimationFrame(() => { el.style.opacity = "1"; });
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { el.style.opacity = "0"; }, 1400);
+    }
+
+    // INIT
+    updateUI();
+  </script>
+</body>
+</html>

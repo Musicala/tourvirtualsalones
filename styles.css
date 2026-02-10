@@ -1,0 +1,604 @@
+:root{
+  /* Base */
+  --bg: #f6f8ff;
+  --surface: rgba(255,255,255,.78);
+  --surfaceStrong: rgba(255,255,255,.92);
+
+  --text: #0f172a;
+  --muted: rgba(15,23,42,.70);
+
+  --brandA: #0C41C4;   /* Azul Mozart */
+  --brandB: #680DBF;   /* Violeta */
+  --brandC: #CE0071;   /* Magenta acento (suave) */
+
+  --stroke: rgba(12,65,196,.12);
+  --stroke2: rgba(104,13,191,.10);
+
+  --shadow: 0 22px 60px rgba(15,23,42,.12);
+  --shadowSoft: 0 12px 28px rgba(15,23,42,.08);
+  --shadowLift: 0 18px 42px rgba(15,23,42,.12);
+
+  --r: 18px;
+
+  /* Layout */
+  --max: 1100px;
+  --pad: 16px;
+
+  /* Focus */
+  --focus: 0 0 0 4px rgba(12,65,196,.18);
+
+  /* Motion */
+  --t: .14s;
+  --e: cubic-bezier(.2,.8,.2,1);
+}
+
+/* -----------------------
+   Reset-ish
+------------------------ */
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+  color: var(--text);
+  line-height: 1.35;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+
+  /* Background premium, claro, sin exagerar */
+  background:
+    radial-gradient(1200px 700px at 10% 0%, rgba(104,13,191,.10), transparent 60%),
+    radial-gradient(1000px 600px at 90% 10%, rgba(12,65,196,.12), transparent 55%),
+    radial-gradient(900px 520px at 50% 95%, rgba(206,0,113,.06), transparent 60%),
+    var(--bg);
+}
+
+img, video{
+  max-width: 100%;
+  height: auto;
+}
+
+/* -----------------------
+   Accessibility helpers
+------------------------ */
+.skip{
+  position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+}
+.skip:focus{
+  left:16px; top:16px; width:auto; height:auto;
+  background:#fff; padding:10px 12px; border-radius:12px;
+  box-shadow: var(--shadowSoft);
+  z-index: 9999;
+  outline: none;
+}
+
+:focus-visible{
+  outline: none;
+  box-shadow: var(--focus);
+  border-radius: 12px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+}
+
+/* -----------------------
+   Topbar
+------------------------ */
+.top{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  backdrop-filter: blur(14px);
+  background: rgba(246,248,255,.68);
+  border-bottom: 1px solid rgba(12,65,196,.10);
+}
+
+.top__inner{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 14px var(--pad);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 12px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.brand__logo{
+  width:40px; height:40px;
+  object-fit:contain;
+  filter: drop-shadow(0 10px 18px rgba(15,23,42,.10));
+}
+
+.brand__text{ min-width:0; }
+
+.brand__kicker{
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: .2px;
+}
+
+.brand__title{
+  font-size: 18px;
+  margin: 0;
+  letter-spacing: .2px;
+}
+
+.top__cta{ display:flex; gap:10px; }
+
+/* Better mobile wrapping */
+@media (max-width: 520px){
+  .top__inner{ flex-wrap: wrap; }
+  .top__cta{ width:100%; justify-content:flex-start; }
+}
+
+/* -----------------------
+   Wrapper
+------------------------ */
+.wrap{
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 18px var(--pad) 88px;
+}
+
+/* -----------------------
+   Typography helpers
+------------------------ */
+.h2{
+  margin: 0 0 8px;
+  font-size: 18px;
+  letter-spacing: .1px;
+}
+.h3{
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: .1px;
+}
+.p{
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.p--muted{ color: rgba(15,23,42,.62); }
+
+@media (min-width: 920px){
+  .brand__title{ font-size: 20px; }
+  .h2{ font-size: 20px; }
+}
+
+/* -----------------------
+   Hero card
+------------------------ */
+.hero__card{
+  border-radius: calc(var(--r) + 6px);
+  background: linear-gradient(180deg, var(--surface), rgba(255,255,255,.60));
+  border: 1px solid var(--stroke);
+  box-shadow: var(--shadow);
+  padding: 16px;
+
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+
+  backdrop-filter: blur(10px);
+}
+
+@media (min-width: 920px){
+  .hero__card{
+    padding: 18px;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+}
+
+/* -----------------------
+   Meta + dots
+------------------------ */
+.hero__meta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top: 10px;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  padding: 8px 10px;
+  border-radius: 999px;
+
+  background: rgba(12,65,196,.08);
+  border: 1px solid rgba(12,65,196,.12);
+
+  font-size: 12px;
+  color: rgba(15,23,42,.78);
+  white-space: nowrap;
+}
+
+.dots{ display:flex; gap:8px; align-items:center; justify-content:flex-end; }
+
+.dot{
+  width: 10px; height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(12,65,196,.22);
+  background: rgba(255,255,255,.75);
+
+  cursor:pointer;
+  transition: transform var(--t) var(--e), box-shadow var(--t) var(--e), background var(--t) var(--e);
+}
+
+.dot:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(15,23,42,.10);
+}
+
+.dot.is-on{
+  background: linear-gradient(135deg, rgba(12,65,196,.92), rgba(104,13,191,.78));
+  border-color: transparent;
+}
+
+/* -----------------------
+   Buttons
+------------------------ */
+.hero__nav{
+  display:flex;
+  gap:10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.btn{
+  border: 0;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 10px 12px;
+
+  font-weight: 800;
+  letter-spacing: .1px;
+
+  background: linear-gradient(135deg, rgba(12,65,196,.98), rgba(104,13,191,.86));
+  color: #fff;
+
+  box-shadow: 0 10px 22px rgba(12,65,196,.18);
+  transition: transform var(--t) var(--e), box-shadow var(--t) var(--e), filter var(--t) var(--e);
+  user-select: none;
+}
+
+.btn:hover{
+  filter: brightness(1.02);
+  box-shadow: 0 14px 30px rgba(12,65,196,.20);
+}
+
+.btn:active{ transform: translateY(1px); }
+.btn:focus-visible{ box-shadow: var(--focus), 0 10px 22px rgba(12,65,196,.18); }
+
+.btn--soft{
+  background: rgba(255,255,255,.90);
+  color: rgba(15,23,42,.88);
+  border: 1px solid rgba(12,65,196,.18);
+  box-shadow: var(--shadowSoft);
+}
+
+.btn--soft:hover{ box-shadow: var(--shadowLift); }
+
+/* -----------------------
+   Player
+------------------------ */
+.player{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.player__frame{
+  border-radius: 18px;
+  overflow:hidden;
+
+  border: 1px solid rgba(255,255,255,.55);
+  background: #000;
+  box-shadow: var(--shadowSoft);
+}
+
+/* Works for iframe or video */
+.player__frame iframe,
+.player__frame video{
+  display:block;
+  width:100%;
+  aspect-ratio: 16 / 9;
+  border:0;
+  background:#000;
+}
+
+.player__bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.player__title{
+  font-weight: 900;
+  font-size: 14px;
+
+  min-width: 0;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player__actions{ display:flex; gap:8px; align-items:center; }
+
+.iconbtn{
+  border: 1px solid rgba(12,65,196,.18);
+  background: rgba(255,255,255,.92);
+
+  border-radius: 14px;
+  padding: 8px 10px;
+
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(15,23,42,.06);
+  transition: transform var(--t) var(--e), box-shadow var(--t) var(--e), background var(--t) var(--e);
+  user-select:none;
+  text-decoration: none;
+
+  color: rgba(15,23,42,.88);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.iconbtn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(15,23,42,.10);
+}
+
+.iconbtn:active{ transform: translateY(1px); }
+.iconbtn[disabled]{ opacity:.55; cursor:not-allowed; transform:none !important; }
+
+.player__desc{
+  margin:0;
+  font-size: 13px;
+  color: rgba(15,23,42,.68);
+}
+
+/* -----------------------
+   Sections
+------------------------ */
+.section{ margin-top: 18px; }
+.section--tight{ margin-top: 10px; }
+
+.section__head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 520px){
+  .section__head{ align-items:flex-start; flex-direction:column; }
+}
+
+/* -----------------------
+   Grid cards
+------------------------ */
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 720px){
+  .grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1020px){
+  .grid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.card{
+  border-radius: 18px;
+  border: 1px solid rgba(12,65,196,.14);
+
+  background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.66));
+  box-shadow: 0 14px 34px rgba(15,23,42,.08);
+
+  padding: 12px;
+  display:flex;
+  gap: 12px;
+  align-items: center;
+
+  cursor: pointer;
+  transition: transform var(--t) var(--e), box-shadow var(--t) var(--e), border-color var(--t) var(--e);
+}
+
+.card:active{ transform: translateY(1px); }
+
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px rgba(15,23,42,.10);
+  border-color: rgba(12,65,196,.20);
+}
+
+.card__icon{
+  width: 44px; height: 44px;
+  border-radius: 14px;
+  display:grid;
+  place-items:center;
+
+  background: linear-gradient(135deg, rgba(12,65,196,.10), rgba(104,13,191,.10));
+  border: 1px solid rgba(12,65,196,.12);
+
+  font-size: 18px;
+  flex: 0 0 auto;
+}
+
+.card__meta{ min-width:0; }
+
+.card__title{
+  margin:0;
+  font-weight: 950;
+  font-size: 14px;
+  letter-spacing: .1px;
+}
+
+.card__desc{
+  margin:2px 0 0;
+  color: rgba(15,23,42,.68);
+  font-size: 12.5px;
+}
+
+.card.is-active{
+  outline: 2px solid rgba(12,65,196,.25);
+  box-shadow: 0 22px 54px rgba(12,65,196,.10);
+}
+
+/* -----------------------
+   Footer
+------------------------ */
+.footer{
+  margin-top: 18px;
+  border-top: 1px solid rgba(12,65,196,.10);
+  padding-top: 14px;
+}
+
+.footer__inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer__title{ font-weight: 950; letter-spacing: .2px; }
+
+.footer__text{
+  color: rgba(15,23,42,.66);
+  font-size: 13px;
+}
+
+.footer__right{
+  display:flex;
+  gap: 12px;
+  align-items:center;
+}
+
+.link{
+  color: rgba(12,65,196,.92);
+  text-decoration: none;
+  font-weight: 900;
+}
+
+.link:hover{ text-decoration: underline; }
+
+/* -----------------------
+   Floating action button (si lo activas)
+------------------------ */
+.fab{
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+
+  display:grid;
+  place-items:center;
+
+  text-decoration:none;
+  font-size: 22px;
+
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(12,65,196,.18);
+  box-shadow: 0 18px 38px rgba(15,23,42,.12);
+
+  transition: transform var(--t) var(--e), box-shadow var(--t) var(--e);
+}
+
+.fab:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 22px 50px rgba(15,23,42,.14);
+}
+
+.fab:active{ transform: translateY(1px); }
+
+/* -----------------------
+   Modal (Cinema)
+------------------------ */
+.modal{
+  position: fixed;
+  inset: 0;
+  display:none;
+  z-index: 50;
+}
+
+.modal.is-open{ display:block; }
+
+.modal__backdrop{
+  position:absolute;
+  inset:0;
+  background: rgba(15,23,42,.55);
+  backdrop-filter: blur(6px);
+}
+
+.modal__panel{
+  position:absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+
+  width: min(980px, calc(100% - 24px));
+  background: linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.80));
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 22px;
+
+  box-shadow: 0 28px 70px rgba(15,23,42,.25);
+  overflow:hidden;
+
+  backdrop-filter: blur(10px);
+}
+
+.modal__top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding: 12px 12px 10px;
+  border-bottom: 1px solid rgba(12,65,196,.10);
+}
+
+.modal__title{
+  font-weight: 950;
+  font-size: 14px;
+  margin-right: 10px;
+  overflow:hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Works for iframe or video */
+.modal__frame iframe,
+.modal__frame video{
+  width:100%;
+  aspect-ratio: 16/9;
+  border:0;
+  background:#000;
+  display:block;
+}
+
+/* Small fix so modal doesn't feel cramped on short screens */
+@media (max-height: 720px){
+  .modal__panel{ top: 54%; }
+}
